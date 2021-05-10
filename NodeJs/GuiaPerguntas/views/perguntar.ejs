@@ -1,0 +1,31 @@
+<!--Importando o cabeçalho  -->
+<%-include('./partials/header.ejs'); %>
+
+<body>
+  <%-include('./partials/navbar.ejs');%>
+  <div class="container">
+    <div class="card" id="formulario-perguntas">
+
+      <div class="card-header">
+        <h3>Realizar perguntas</h3>
+      </div>
+
+
+      <div class="card-body">
+        <!-- Envia os dados do formulario para a rota /salvequest -->
+        <form method="POST" action="/salvequest">
+          <label>Titulo</label>
+          <input type="text" placeholder="Titulo" class="form-control" name="titulo">
+          <br><label>Descrição</label>
+          <textarea placeholder="Escreva sua pergunta aqui" class="form-control" name="descricao"></textarea>
+          <br>
+          <button class="btn btn-success">Perguntar</button>
+        </form>
+      </div>
+    </div>
+
+
+  </div>
+
+</body>
+<%-include('./partials/footer.ejs');%>

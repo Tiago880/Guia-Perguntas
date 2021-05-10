@@ -1,0 +1,13 @@
+{
+  "name": "iniciando",
+  "version": "1.0.0",
+  "description": "iniciando com express",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "scripts":{
+    "start": "nodemon app.js"
+  }
+}
