@@ -1,4 +1,7 @@
+//importanto modulo do express
 const express = require('express');
+
+// criando uma instancia do express
 const app = express();
 
 // instale o bodyparser
@@ -33,6 +36,7 @@ app.get("/pergunte",(req,res)=>{
   res.render("perguntar");
 });
 
+// POST recebe dados do formulario
 app.post("/salvequest",(req,res)=>{
 const titulo = req.body.titulo;
 const descricao = req.body.descricao;
