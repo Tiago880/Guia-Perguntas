@@ -23,6 +23,17 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 // public é a pasta onde ficam os arquivos estáticos
 
+const connection = require("./database/database");
+//Databse
+
+connection
+  .authenticate()
+  .then(() =>{
+    console.log("Conexão com o banco de dados");
+})
+.catch((msgErro) => {
+  console.log(msgErro);
+})
 
 //Quando coloca uma /: na rota, você
 //está criando um parametro na rota
