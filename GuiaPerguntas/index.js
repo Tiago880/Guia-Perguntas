@@ -1,61 +1,62 @@
-//importanto modulo do express
-const express = require('express');
+const {
+    response,
+    request
+} = require('express');
+const express = require('express') //importanto modulo do express
+const app = express(); // criando uma instancia do express
+const bodyParser = require("body-parser");
+const connection = require('./database/database');
+const perguntaModel = require('./database/Pergunta');
+const Pergunta = require('./database/Pergunta');
 
-// criando uma instancia do express
-const app = express();
+connection
+    .authenticate()
+    .then(() => {
+        console.log("Conexão feita com banco de dados")
+    })
+    .catch((msgErro) => {
+        console.log(msgErro);
+    })
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 
-// instale o bodyparser
-const bodyParser = require('body-parser');
-
-
-app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json());
 
 
-// estou dizendo para o Express usar 
-// o EJS como View engine
 app.set('view engine', 'ejs');
-// Todos os arquivos HTML são salvos e lidos 
-// pelo express na pasta views
-
-
-//Utilizar arquivos estáticos no express
 app.use(express.static('public'));
-// public é a pasta onde ficam os arquivos estáticos
 
-const connection = require("./database/database");
-//Databse
-
-connection
-  .authenticate()
-  .then(() =>{
-    console.log("Conexão com o banco de dados");
-})
-.catch((msgErro) => {
-  console.log(msgErro);
-})
-
-//Quando coloca uma /: na rota, você
-//está criando um parametro na rota
-// req.params. atribui a uma constante
-// o parametro digitado pelo usuario na rota
-app.get("/",(req,res) => {
-res.render("index");
+app.get("/", (request, response) => {
+    Pergunta.findAll({
+        raw: true , order: [
+            ['id' , 'DESC']
+        ]
+    }).then(perguntas => {
+        response.render("index", {
+            perguntas
+        });
+    });
 });
 
-app.get("/pergunte",(req,res)=>{
-  res.render("perguntar");
+
+app.get("/perguntar", (request, response) => {
+    response.render("perguntar");
 });
 
-// POST recebe dados do formulario
-app.post("/salvequest",(req,res)=>{
-const titulo = req.body.titulo;
-const descricao = req.body.descricao;
-res.send("O titulo passado eh " + titulo + " E a descricao eh "+descricao);
-});
+app.post("/salvarpergunta", (request, response) => {
+    let titulo = request.body.titulo;
+    let descricao = request.body.descricao;
 
-app.listen(8080,() => {
+    Pergunta.create({
+        titulo,
+        descricao
+    }).then(() => {
+        response.redirect("/");
+    });
 
 });
 
-console.log("ola");
+app.listen(8080, () => {
+    console.log("APP rodando")
+});

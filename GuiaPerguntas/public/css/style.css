@@ -1,7 +1,7 @@
-body{
-  background-color: rgb(152, 114, 189);
+body {
+    background-color: gainsboro;
 }
 
-#formulario-perguntas{
-  margin-top: 5vh;
+#formulario-pergunta {
+    margin: 5vh;
 }
