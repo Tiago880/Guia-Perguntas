@@ -8,6 +8,9 @@ const bodyParser = require("body-parser");
 const connection = require('./database/database');
 const perguntaModel = require('./database/Pergunta');
 const Pergunta = require('./database/Pergunta');
+const Resposta = require("./database/Resposta");
+
+
 
 connection
     .authenticate()
@@ -29,8 +32,9 @@ app.use(express.static('public'));
 
 app.get("/", (request, response) => {
     Pergunta.findAll({
-        raw: true , order: [
-            ['id' , 'DESC']
+        raw: true,
+        order: [
+            ['id', 'DESC']
         ]
     }).then(perguntas => {
         response.render("index", {
@@ -55,6 +59,23 @@ app.post("/salvarpergunta", (request, response) => {
         response.redirect("/");
     });
 
+});
+
+app.get("/pergunta/:id", (request, response) => {
+    let id = request.params.id;
+    Pergunta.findOne({
+        where: {
+            id: id
+        }
+    }).then(pergunta => {
+            if(pergunta != undefined){
+                response.render("pergunta", {
+                    pergunta
+                });
+            } else {
+                response.redirect("/");
+            }
+    });
 });
 
 app.listen(8080, () => {
