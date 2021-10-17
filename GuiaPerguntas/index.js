@@ -69,12 +69,34 @@ app.get("/pergunta/:id", (request, response) => {
         }
     }).then(pergunta => {
             if(pergunta != undefined){
-                response.render("pergunta", {
-                    pergunta
+
+                Resposta.findAll({
+                    where: {perguntaId: pergunta.id},
+                    order: [
+                        ['id', 'DESC']
+                    ]
+                }).then((respostas) => {
+
+                    response.render("pergunta", {
+                        pergunta,
+                        respostas
+                    });
                 });
+              
             } else {
                 response.redirect("/");
             }
+    });
+});
+
+app.post("/responder", (request, response) => {
+    let corpo = request.body.corpo;
+    let perguntaId = request.body.pergunta;
+    Resposta.create({
+        corpo: corpo,
+        perguntaId
+    }).then(() => {
+        response.redirect("/pergunta/"+perguntaId);
     });
 });
 
